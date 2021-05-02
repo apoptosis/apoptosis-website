@@ -1,7 +1,7 @@
 import { BOOKS } from '../data/reading-lists/books'
 import { AUTHORS } from '../data/reading-lists/authors'
-import { auth } from '../utils/auth'
-import { Box, Image, VStack, HStack, Center, Heading, Container } from '@chakra-ui/react'
+import { auth, formats } from '../utils/auth'
+import { Box, VStack, HStack, Center, Heading } from '@chakra-ui/react'
 import { FC, useEffect, useState } from 'react'
 
 
@@ -14,7 +14,7 @@ type BookProps = {
 const Book: FC<BookProps> = ({ id, book }) => {
     const imgsrc = '/img/list-content/' + id + '.jpg'
     const booktitle = book.title
-    const bookauthor = auth(AUTHORS[book.author[0]])
+    const bookauthor = auth(AUTHORS[book.author[0]], formats.truncated)
     try{
         return (
             <Box w="20vw">
