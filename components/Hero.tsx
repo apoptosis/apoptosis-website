@@ -1,4 +1,4 @@
-import { Gradient } from 'react-gradient';
+import { Gradient } from 'react-gradient'
 import { Center, Heading, useColorModeValue, VStack } from "@chakra-ui/react"
 import conf from '../data/config'
 

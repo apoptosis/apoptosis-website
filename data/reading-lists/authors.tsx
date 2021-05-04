@@ -240,5 +240,10 @@ export const AUTHORS = {
     "jesse-byock": {
         id: "jesse-byock",
         name: [[0, "Jesse"], [0, "Byock"]]
+    },
+
+    "gordon-tullock": {
+        id: "gordon-tullock",
+        name: [[0, "Gordon"], [0, "Tullock"]]
     }
 }

@@ -24,7 +24,7 @@ const ReadingLists = () => {
             </div>
             <Hero title="Reading Lists" subtitle="Community curated topical reading cirriculums"/>
             <FeaturedBooks/>
-            <PageFooter top="90vh"/>
+            <PageFooter top="95vh"/>
         </ChakraProvider>
     )
 }

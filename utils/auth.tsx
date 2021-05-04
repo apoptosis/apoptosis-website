@@ -10,7 +10,7 @@ const { ATOM_IS_NAME
       , ATOM_IS_ORG
       } = ATOMS
 
-export function auth(a:{name:Array<any>,id:string}, format:(name:Array<any>) => any): string{
+export function auth(a:{name:[number,string],id:string}, format:(name:[number,string]) => any): string{
     try{
         return format(a.name)
     }
@@ -20,14 +20,14 @@ export function auth(a:{name:Array<any>,id:string}, format:(name:Array<any>) => 
 }
 
 export const formats = {
-    verbose: (name:Array<any>) => {
+    verbose: (name:[number,string]) => {
         let n = ''
         for(let atom of name){
             n += atom[1]
         }
         return n
     },
-    surname_forename: (name:Array<any>) => {
+    surname_forename: (name:[number,string]) => {
         let n = ''
         for(let atom of name){
             switch(atom[0]){
@@ -48,7 +48,7 @@ export const formats = {
         }
         return n
     },
-    truncated: (name:Array<any>) => {
+    truncated: (name:[number,string]) => {
         let n = ''
         let narr = []
         for(let atom of name){

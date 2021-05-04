@@ -1,12 +1,16 @@
 import ReactFlow from 'react-flow-renderer'
-import fac from './factorial'
 
-function nCk(n:number,k:number): number{
-    if(0<=k && k<n){
-        return (fac(n)/(fac(k) * fac(n-k)))
+const ids = {
+    topid: 0,
+    labelmap: {}
+}
+
+function id(label){
+    if(!!ids.labelmap[label]){
+        return ids.labelmap[label]
     }
     else{
-        return 0
+        ids.labelmap[label] = ids.topid++
     }
 }
 
@@ -16,7 +20,7 @@ export default function make_rl(rl:any[], farr:number[], cats:string[], vis:{}):
         if(!!cats[i]){
             rl_elements.push(
                 {
-                    id: `${j}`,
+                    id: `${id(cats[j])}`,
                     type: 'input',
                     data: { label: cats[i] },
                     position: { x: (vis['category-width']/2) + (vis['category-width']*j), y: vis['category-input-y'] },
@@ -38,5 +42,6 @@ export default function make_rl(rl:any[], farr:number[], cats:string[], vis:{}):
                 
         }
     }
+    console.log(rl_elements)
     return rl_elements
 }

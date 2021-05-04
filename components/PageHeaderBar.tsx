@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Flex, Spacer, Image, Heading, Link, Button, useColorMode } from "@chakra-ui/react"
+import { Box, Flex, Spacer, Image, Heading, Link, Button, useColorMode, Tooltip } from "@chakra-ui/react"
 import conf from '../data/config'
 import { MoonIcon, SunIcon  } from '@chakra-ui/icons'
 import { AiFillGithub } from 'react-icons/ai'
@@ -26,14 +26,19 @@ const PageHeaderBar = () => {
                     <Button color="white" colorScheme="whiteAlpha" variant="ghost" size="lg" mr="2">Articles</Button>
                 </Link>
                 <Spacer />
-                <Button size="lg" color="white" colorScheme="whiteAlpha" variant="ghost" onClick={toggleColorMode} mr="2">
-                    {colorMode === "light" ? <MoonIcon/> : <SunIcon/>}
-                </Button> 
-                <Link href={`${conf.repo_host}${conf.repo}`} isExternal>
-                    <Button size="lg" color="white" colorScheme="whiteAlpha" variant="ghost">
-                        <AiFillGithub />
-                    </Button>
-                </Link>
+                <Tooltip label={colorMode === "light" ? "Dark Mode" : "Light Mode"} aria-label="A tooltip">
+                    <Button size="lg" color="white" colorScheme="whiteAlpha" variant="ghost" onClick={toggleColorMode} mr="2">
+                        {colorMode === "light" ? <MoonIcon/> : <SunIcon/>}
+                    </Button> 
+                </Tooltip>
+                <Tooltip label="Fork this site on GitHub" aria-label="A tooltip">
+                    <Link href={`${conf.repo_host}${conf.repo}`} isExternal>
+                        <Button size="lg" color="white" colorScheme="whiteAlpha" variant="ghost">
+                            <AiFillGithub />
+                        </Button>
+                    </Link>
+                </Tooltip>
+                
             </Flex>
         </Box>
     )

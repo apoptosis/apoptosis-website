@@ -1,9 +1,8 @@
 import { BOOKS } from '../data/reading-lists/books'
 import { AUTHORS } from '../data/reading-lists/authors'
 import { auth, formats } from '../utils/auth'
-import { Box, VStack, HStack, Center, Heading } from '@chakra-ui/react'
+import { Box, VStack, HStack, Center, Heading, Link, Button } from '@chakra-ui/react'
 import { FC, useEffect, useState } from 'react'
-
 
 
 type BookProps = {
@@ -57,56 +56,13 @@ const FeaturedBooks = () => {
                 <HStack spacing={5}>
                     {featured.map(({ id, book }) => <Book id={id} book={book} />)}
                 </HStack>
+                <Center>
+                    <Link href="/reading-lists/view-lists">
+                        <Button colorScheme="gray" size="lg">See Curriculums</Button>
+                    </Link>
+                </Center>
             </VStack>
         </div>
     )
-    /*return (
-        <div style={{ paddingTop: "2vh", }}>
-            <VStack spacing={5}>
-                <Center>
-                    <Heading size="xl">Some Books To Get You Started</Heading>
-                </Center>
-                <HStack>
-                    <Container>
-                        <VStack>
-                            <Image src={`/img/list-content/${feats[0]}.jpg`}/>
-                            <Header>{BOOKS[feats[0]].title}</Header>
-                            <Header>{auth(AUTHORS[BOOKS[feats[0]].author[0]])}</Header>
-                        </VStack>
-                    </Container>
-                </HStack>
-            </VStack>
-        </div>
-    )*/
 }
 export default FeaturedBooks
-
-// const FeatureList = [
-//   {
-//     title: BOOKS[feats[0]].title,
-//     Jpg: `/img/list-content/${feats[0]}.jpg`,
-//     description: (
-//       <>
-//         {auth(AUTHORS[BOOKS[feats[0]].author[0]])}
-//       </>
-//     ),
-//   },
-//   {
-//     title: BOOKS[feats[1]].title,
-//     Jpg: `/img/list-content/${feats[1]}.jpg`,
-//     description: (
-//       <>
-//         {auth(AUTHORS[BOOKS[feats[1]].author[0]])}
-//       </>
-//     ),
-//   },
-//   {
-//     title: BOOKS[feats[2]].title,
-//     Jpg: `/img/list-content/${feats[2]}.jpg`,
-//     description: (
-//       <>
-//         {auth(AUTHORS[BOOKS[feats[2]].author[0]])}
-//       </>
-//     ),
-//   },
-// ];
