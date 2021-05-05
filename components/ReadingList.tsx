@@ -95,6 +95,7 @@ const ReadingList = params => {
             data: {
                 type: "MID",
                 update: updateNode,
+                delete: deleteNode,
                 id: nodeId,
                 label: (
                     <>
@@ -187,6 +188,18 @@ const ReadingList = params => {
             })
         );
     }, [setElements]);
+
+    const deleteNode = useCallback(nodeId => {
+        console.log(nodeId)
+        setElements((els) =>
+            els.map((el) => {
+                if (nodeId === el.id) {
+                    return removeElements([el], els)
+                }
+                return el;
+            })
+        );
+    }, [setElements, removeElements])
 
     const updateEdgeType = useCallback((et, anim=false) => {
         try{

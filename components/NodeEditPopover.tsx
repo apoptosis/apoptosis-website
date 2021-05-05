@@ -1,4 +1,4 @@
-import React, { forwardRef, useRef } from 'react'
+import React, { forwardRef, useRef, useState } from 'react'
 import FocusLock from 'react-focus-lock'
 import {
     useDisclosure,
@@ -24,11 +24,20 @@ import {
     Heading,
     useToast,
     Code,
+    AlertDialog,
+    AlertDialogBody,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogContent,
+    AlertDialogOverlay,
 } from "@chakra-ui/react"
 import { EditIcon, CopyIcon, } from '@chakra-ui/icons'
 
 const Form = ({ data, firstFieldRef, onCancel }) => {
     const toast = useToast()
+    const [isOpen, setIsOpen] = useState(false)
+    const onClose = () => setIsOpen(false)
+    const cancelRef = useRef()
 
     return (
         <Stack spacing={4}>
@@ -93,11 +102,39 @@ const Form = ({ data, firstFieldRef, onCancel }) => {
                         }
                     )()
                 }
-                
             </FormControl>
+            <AlertDialog
+                isOpen={isOpen}
+                leastDestructiveRef={cancelRef}
+                onClose={onClose}
+            >
+                <AlertDialogOverlay>
+                    <AlertDialogContent>
+                        <AlertDialogHeader fontSize="lg" fontWeight="bold">
+                            Delete Node
+                        </AlertDialogHeader>
+
+                        <AlertDialogBody>
+                            Are you sure? You can't undo this action afterwards.
+                        </AlertDialogBody>
+
+                        <AlertDialogFooter>
+                            <Button ref={cancelRef} onClick={onClose}>
+                                Cancel
+                            </Button>
+                            <Button colorScheme="red" onClick={()=>{data.delete(data.id)}} ml={3}>
+                                Delete
+                            </Button>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialogOverlay>
+            </AlertDialog>
             <ButtonGroup d="flex" justifyContent="flex-end">
                 <Button variant="outline" onClick={onCancel}>
                     Cancel
+                </Button>
+                <Button colorScheme="red" onClick={()=>{setIsOpen(true)}}>
+                    Delete Node
                 </Button>
                 <Button
                     onClick={e => {
