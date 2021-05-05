@@ -1,17 +1,29 @@
 import React, { useEffect, useState, useCallback } from 'react'
-import ReactFlow, { removeElements, addEdge, Background, useZoomPanHelper, Handle } from 'react-flow-renderer'
+import ReactFlow, {
+    removeElements,
+    addEdge,
+    Background,
+    useZoomPanHelper,
+    Handle,
+    getBezierPath,
+    EdgeText,
+    getEdgeCenter,
+    getMarkerEnd,
+    BezierEdge,
+    StraightEdge,
+    StepEdge,
+    SmoothStepEdge,
+} from 'react-flow-renderer'
 import make_rl from '../utils/make-reading-list'
 import { ContextMenu, MenuItem, ContextMenuTrigger } from "react-contextmenu"
 import { Node } from 'react-flow-renderer/dist/types'
-import { Heading, Image } from '@chakra-ui/react'
+import { Heading, Image, useColorMode, useColorModeValue, Box, } from '@chakra-ui/react'
 import EditableNode from '../components/EditableNode'
+//import EdgeEditPopover from './EdgeEditPopover'
+//import EditableEdge from '../components/EditableEdge'
 
 const onNodeDragStop = (event, node) => console.log('drag stop', node)
 const onElementClick = (event, element) => console.log('click', element)
-
-const editNode = params => {
-    alert('si senor')
-}
 
 const ReadingList = params => {
     
@@ -20,9 +32,10 @@ const ReadingList = params => {
     
     const [rfInstance, setRfInstance] = useState(null);
     const [elements, setElements] = useState(initialElements);
+    const [connectionLineComponent, setConnectionLineComponent] = useState(BezierEdge)
+    const [animateEdges, setAnimateEdges] = useState(false)
     const onElementsRemove = (elementsToRemove) => setElements((els) => removeElements(elementsToRemove, els));
     const onConnect = (params) => setElements((els) => addEdge(params, els));
-    const [nodeBookId, setNodeBookId] = useState('/img/list-content/placeholder-book.png')
     
     const onLoad = (reactFlowInstance) => {
         console.log('flow loaded:', reactFlowInstance);
@@ -32,9 +45,13 @@ const ReadingList = params => {
     const addSource = useCallback((e) => {
         const nodeId = getNodeId()
         const newNode = {
-            type: 'input',
+            type: 'editable',
             id: nodeId,
             data: {
+                update: updateNode,
+                customConnectors: false,
+                type: "IN",
+                id: nodeId,
                 label: (
                     <>
                         placeholder input text
@@ -56,15 +73,19 @@ const ReadingList = params => {
             type: 'editable',
             id: nodeId,
             data: {
-                update: id => setNodeBookId(id),
+                type: "MID",
+                update: updateNode,
                 id: nodeId,
                 label: (
                     <>
-                        <Image maxW="100" maxH="150" src="/img/list-content/placeholder-book.png" alt="Placeholder Book Cover"/>
+                        <img style={{ width:100, height:150, zIndex:-1 }} src="/img/list-content/placeholder-book.png" alt="Placeholder Book Cover"/>
                     </>
                 ),
                 onChange: () => {},
                 color: '#fff',
+                customConnectors: false,
+
+                // leaving here for example, tag: DOCUMENT
                 connectors: (
                     <>
                         <Handle
@@ -129,27 +150,23 @@ const ReadingList = params => {
         restoreFlow();
     }, [setElements])
 
-    useEffect(nodeId => {
+    const updateNode = useCallback((editButtonId, newNodeData) => {
         setElements((els) =>
             els.map((el) => {
-                console.log(el)
-                if (el.id === nodeId) {
+                console.log(editButtonId,' ',`edit__${el.id}`)
+                if (editButtonId === `edit__${el.id}`) {
                     // it's important that you create a new object here
                     // in order to notify react flow about the change
                     el = {
                         ...el,
-                        label: (
-                            <>
-                                <Image maxW="100" maxH="150" src={`/img/list-content/${nodeBookId}`} alt={nodeBookId}/>
-                            </>
-                        )
+                        data: newNodeData
                     };
                 }
                 
                 return el;
             })
         );
-    }, [nodeBookId, setElements]);
+    }, [setElements]);
 
     const getNodeId = () => `randomnode_${+new Date()}`;
 
@@ -157,6 +174,11 @@ const ReadingList = params => {
         return (
             <div>
                 <ContextMenuTrigger id="flow_edit_menu" holdToDisplay={1000}>
+                    <Box style={{position:'fixed', top:'10vh', left: '2vw', zIndex: 99, }} bg="gray.900" maxW="lg" borderWidth="1px" borderRadius="lg" overflow="hidden">
+                        <Box p={3}>
+                            test
+                        </Box>
+                    </Box>
                     <div style={{height: "92vh"}}>
                         <ReactFlow
                             elements={elements}
@@ -166,7 +188,8 @@ const ReadingList = params => {
                             onConnect={onConnect}
                             nodeTypes={{
                                 editable: EditableNode,
-                            }}>
+                            }}
+                            connectionLineComponent={connectionLineComponent}>
                             <Background
                                 gap={25}
                                 size={1}/>

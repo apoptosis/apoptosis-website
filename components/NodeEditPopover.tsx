@@ -21,33 +21,127 @@ import {
     Input,
     IconButton,
     Stack,
+    Heading,
+    useToast,
+    Code,
 } from "@chakra-ui/react"
-import { EditIcon, } from '@chakra-ui/icons'
+import { EditIcon, CopyIcon, } from '@chakra-ui/icons'
 
 const Form = ({ data, firstFieldRef, onCancel }) => {
-  return (
-      <Stack spacing={4}>
-          <FormControl id={ `form__${data.id}` }>
-              <FormLabel>Book ID</FormLabel>
-              <Input type="text" />
-              <FormHelperText>The ID for the book, if /img/list-content/book-id.jpg exists then it will be displayed as an image.</FormHelperText>
-          </FormControl>
-          <ButtonGroup d="flex" justifyContent="flex-end">
-              <Button variant="outline" onClick={onCancel}>
-                  Cancel
-              </Button>
-              <Button
-                  onClick={e => {
-                      console.log(data)
-                      data.update(e.target.id)
-                  }}
-                  id={ `edit__${data.id}` }
-                  colorScheme="teal">
-                  Save
-              </Button>
-          </ButtonGroup>
-      </Stack>
-  )
+    const toast = useToast()
+
+    return (
+        <Stack spacing={4}>
+            <Button
+                rightIcon={<CopyIcon/>}
+                onClick={()=>{
+                    try{
+                        navigator.clipboard.writeText(data.id).then(
+                            toast({
+                                title: "Success.",
+                                description: "ID copied to clipboard.",
+                                status: "success",
+                                duration: 2000,
+                                isClosable: true,
+                            })
+                        )
+                    }catch(e){
+                        console.log(e)
+                        toast({
+                            title: "Error.",
+                            description: `Error copying ID to clipboard (see logs for details): ${e}`,
+                            status: "error",
+                            duration: 2000,
+                            isClosable: true,
+                        })
+                    }
+                }}>
+                {data.id}
+            </Button>
+            <FormControl id={ `form__${data.id}` }>
+                {
+                    (
+                        () => {
+                            switch(data.type){
+                                case "IN": {
+                                    {
+                                        return (
+                                            <>
+                                                <FormLabel>Category Title</FormLabel>
+                                                <Input type="text" name="cat-title"/>
+                                                <FormHelperText>The title for this category.</FormHelperText>
+                                            </>
+                                        )                                  
+                                    }
+                                    break;
+                                }
+                                    
+                                case "MID":
+                                case "OUT": {
+                                    {
+                                        return (
+                                            <>
+                                                <FormLabel>Book ID</FormLabel>
+                                                <Input type="text" name="book-id"/>
+                                                <FormHelperText>The ID for the book, if /img/list-content/book-id.jpg exists then it will be displayed as an image.</FormHelperText>
+                                            </>
+                                        )
+                                    }
+                                    break;
+                                }
+                            }
+                        }
+                    )()
+                }
+                
+            </FormControl>
+            <ButtonGroup d="flex" justifyContent="flex-end">
+                <Button variant="outline" onClick={onCancel}>
+                    Cancel
+                </Button>
+                <Button
+                    onClick={e => {
+                        switch(data.type){
+                            case "IN": {
+                                {
+                                    data.update(e.target.id,{
+                                        ...data,
+                                        label: (
+                                            <>
+                                                {document.getElementById(`form__${data.id}`).value}
+                                            </>
+                                        )   
+                                    })
+                                    onCancel()
+                                }
+                                break;
+                            }
+                                
+                            case "MID":
+                            case "OUT": {
+                                {
+                                    let bookId = document.getElementById(`form__${data.id}`).value
+                                    data.update(e.target.id,{
+                                        ...data,
+                                        label: (
+                                            <>
+                                                <img style={{ width:100, height:150 }} src={`/img/list-content/${bookId}.jpg`} alt={bookId}/>
+                                            </>
+                                        )   
+                                    })
+                                    onCancel()
+                                }
+                                break;
+                            }
+                        }
+                    }}
+                    id={ `edit__${data.id}` }
+                    colorScheme="teal">
+                    Save
+                </Button>
+            </ButtonGroup>
+        </Stack>
+    )
 }
 
 const NodeEditPopover = ({ data }) => {
@@ -65,7 +159,9 @@ const NodeEditPopover = ({ data }) => {
               closeOnBlur={false}
           >
               <PopoverTrigger>
-                  <IconButton size="sm" icon={<EditIcon />} />
+                  <Box as="button">
+                      {data.label}
+                  </Box>
               </PopoverTrigger>
               <PopoverContent p={5}>
                   <FocusLock returnFocus persistentFocus={false}>
@@ -79,35 +175,3 @@ const NodeEditPopover = ({ data }) => {
   )
 }
 export default NodeEditPopover
-
-
-const sumn = () => {
-    return (
-        <Popover>
-            <PopoverTrigger>
-                <Button
-                    colorScheme="teal"
-                    size="sm"
-                >
-                    Edit Node
-                </Button>
-            </PopoverTrigger>
-            <PopoverContent>
-                <PopoverArrow />
-                <PopoverCloseButton
-                    onClick={e => {
-                        
-                    }}
-                    id={ `edit__${data.id}` }/>
-                <PopoverHeader>Node Options</PopoverHeader>
-                <PopoverBody>
-                    <FormControl id={ `form__${data.id}` }>
-                        <FormLabel>Book ID</FormLabel>
-                        <Input type="text" />
-                        <FormHelperText>The ID for the book, if /img/list-content/book-id.jpg exists then it will be displayed as an image.</FormHelperText>
-                    </FormControl>
-                </PopoverBody>
-            </PopoverContent>
-        </Popover>
-    )
-}
