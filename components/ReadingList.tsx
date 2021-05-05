@@ -17,7 +17,25 @@ import ReactFlow, {
 import make_rl from '../utils/make-reading-list'
 import { ContextMenu, MenuItem, ContextMenuTrigger } from "react-contextmenu"
 import { Node } from 'react-flow-renderer/dist/types'
-import { Heading, Image, useColorMode, useColorModeValue, Box, } from '@chakra-ui/react'
+import {
+    Heading,
+    Image,
+    useColorMode,
+    useColorModeValue,
+    Box,
+    FormControl,
+    FormLabel,
+    FormErrorMessage,
+    FormHelperText,
+    HStack,
+    RadioGroup,
+    Radio,
+    Link,
+    Divider,
+    ButtonGroup,
+    Button,
+    useToast,
+} from '@chakra-ui/react'
 import EditableNode from '../components/EditableNode'
 //import EdgeEditPopover from './EdgeEditPopover'
 //import EditableEdge from '../components/EditableEdge'
@@ -36,6 +54,8 @@ const ReadingList = params => {
     const [animateEdges, setAnimateEdges] = useState(false)
     const onElementsRemove = (elementsToRemove) => setElements((els) => removeElements(elementsToRemove, els));
     const onConnect = (params) => setElements((els) => addEdge(params, els));
+
+    const toast = useToast()
     
     const onLoad = (reactFlowInstance) => {
         console.log('flow loaded:', reactFlowInstance);
@@ -176,7 +196,70 @@ const ReadingList = params => {
                 <ContextMenuTrigger id="flow_edit_menu" holdToDisplay={1000}>
                     <Box style={{position:'fixed', top:'10vh', left: '2vw', zIndex: 99, }} bg="gray.900" maxW="lg" borderWidth="1px" borderRadius="lg" overflow="hidden">
                         <Box p={3}>
-                            test
+                            <FormControl id="connector-edit-form--type" as="fieldset">
+                                <FormLabel as="legend">Connector Type</FormLabel>
+                                <RadioGroup defaultValue="default">
+                                    <HStack spacing="1vw">
+                                        <Radio value="default">Bezier</Radio>
+                                        <Radio value="straight">Straight</Radio>
+                                        <Radio value="step">Stepped</Radio>
+                                        <Radio value="smoothstep">Smooth Stepped</Radio>
+                                    </HStack>
+                                </RadioGroup>
+                                <FormHelperText>See: <Link href="https://reactflow.dev/examples/edges/">https://reactflow.dev/examples/edges/</Link></FormHelperText>
+                            </FormControl>
+                            
+                            <br/><Divider/><br/>
+                            
+                            <FormControl id="connector-edit-form--style" as="fieldset">
+                                <FormLabel as="legend">Connector Style</FormLabel>
+                                <RadioGroup defaultValue="noanim-regular">
+                                    <HStack spacing="1vw">
+                                        <Radio value="noanim-regular">Regular, not animated.</Radio>
+                                        <Radio value="reuglar">Regular, animated.</Radio>
+                                    </HStack>
+                                </RadioGroup>
+                                <FormHelperText>See: <Link href="https://reactflow.dev/examples/edges/">https://reactflow.dev/examples/edges/</Link></FormHelperText>
+                            </FormControl>
+                            
+                            <br/><Divider/>
+
+                            <ButtonGroup style={{paddingTop:'1vh'}} d="flex" justifyContent="flex-end">
+                                <Button
+                                    onClick={() => {
+                                        try{
+                                            const edgeTypes = {
+                                                default: BezierEdge,
+                                                straight: StraightEdge,
+                                                step: StepEdge,
+                                                smoothstep: SmoothStepEdge
+                                            }
+                                            const connType = document.getElementById('connector-edit-form--type')
+                                            const connStyle = document.getElementById('connector-edit-form--style')
+
+                                            setConnectionLineComponent(edgeTypes[connType.value])
+                                            
+                                            toast({
+                                                title: "Success.",
+                                                description: "Edge type hase been set.",
+                                                status: "success",
+                                                duration: 2000,
+                                                isClosable: true,
+                                            })
+                                        }catch(e){
+                                            console.log(e)
+                                            toast({
+                                                title: "Error.",
+                                                description: `Edge type could not be set (see logs for details): ${e}`,
+                                                status: "error",
+                                                duration: 2000,
+                                                isClosable: true,
+                                            })
+                                        }
+                                    }}>
+                                    Apply
+                                </Button>
+                            </ButtonGroup>
                         </Box>
                     </Box>
                     <div style={{height: "92vh"}}>
