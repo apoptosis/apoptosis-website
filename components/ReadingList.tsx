@@ -262,17 +262,6 @@ const ReadingList = params => {
                                 </HStack>
                                 <FormHelperText>See: <Link href="https://reactflow.dev/examples/edges/">https://reactflow.dev/examples/edges/</Link></FormHelperText>
                             </FormControl>
-                            
-                            <br/><Divider/>
-
-                            <ButtonGroup style={{paddingTop:'1vh'}} d="flex" justifyContent="flex-end">
-                                <Button
-                                    onClick={() => {
-                                        
-                                    }}>
-                                    Apply
-                                </Button>
-                            </ButtonGroup>
                         </Box>
                     </Box>
                     <div style={{height: "92vh"}}>
