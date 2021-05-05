@@ -51,10 +51,10 @@ const ReadingList = params => {
     const [rfInstance, setRfInstance] = useState(null);
     const [elements, setElements] = useState(initialElements);
     const [connectionLineComponent, setConnectionLineComponent] = useState(BezierEdge)
+    const [connectionType, setConnectionType] = useState('default')
     const [animateEdges, setAnimateEdges] = useState(false)
-    const onElementsRemove = (elementsToRemove) => setElements((els) => removeElements(elementsToRemove, els));
-    const onConnect = (params) => setElements((els) => addEdge(params, els));
 
+    const onElementsRemove = (elementsToRemove) => setElements((els) => removeElements(elementsToRemove, els));
     const toast = useToast()
     
     const onLoad = (reactFlowInstance) => {
@@ -188,6 +188,49 @@ const ReadingList = params => {
         );
     }, [setElements]);
 
+    const updateEdgeType = useCallback((et, anim=false) => {
+        try{
+            const edgeTypes = {
+                default: BezierEdge,
+                straight: StraightEdge,
+                step: StepEdge,
+                smoothstep: SmoothStepEdge
+            }
+
+            setConnectionType(et)
+            setAnimateEdges(anim)
+            
+            toast({
+                title: "Success.",
+                description: "Edge type hase been set.",
+                status: "success",
+                duration: 2000,
+                isClosable: true,
+            })
+        }catch(e){
+            console.log(e)
+            toast({
+                title: "Error.",
+                description: `Edge type could not be set (see logs for details): ${e}`,
+                status: "error",
+                duration: 2000,
+                isClosable: true,
+            })
+        }
+    }, [setConnectionType, setAnimateEdges])
+    
+    //const onConnect = (params) => setElements((els) => addEdge(params, els))
+
+    const onConnect = useCallback( params => {
+        setElements(els => {
+            return addEdge({
+                ...params,
+                type: connectionType,
+                animated: animateEdges
+            }, els)
+        })
+    }, [connectionType, animateEdges, setElements])
+
     const getNodeId = () => `randomnode_${+new Date()}`;
 
     if(!!params.edit){
@@ -196,29 +239,27 @@ const ReadingList = params => {
                 <ContextMenuTrigger id="flow_edit_menu" holdToDisplay={1000}>
                     <Box style={{position:'fixed', top:'10vh', left: '2vw', zIndex: 99, }} bg="gray.900" maxW="lg" borderWidth="1px" borderRadius="lg" overflow="hidden">
                         <Box p={3}>
-                            <FormControl id="connector-edit-form--type" as="fieldset">
-                                <FormLabel as="legend">Connector Type</FormLabel>
-                                <RadioGroup defaultValue="default">
-                                    <HStack spacing="1vw">
-                                        <Radio value="default">Bezier</Radio>
-                                        <Radio value="straight">Straight</Radio>
-                                        <Radio value="step">Stepped</Radio>
-                                        <Radio value="smoothstep">Smooth Stepped</Radio>
-                                    </HStack>
-                                </RadioGroup>
+                            <FormControl as="fieldset">
+                                <FormLabel as="legend">Regular</FormLabel>
+                                <HStack spacing="1vw">
+                                    <Button onClick={()=>{updateEdgeType('bezier')}}>Bezier</Button>
+                                    <Button onClick={()=>{updateEdgeType('straight')}}>Straight</Button>
+                                    <Button onClick={()=>{updateEdgeType('step')}}>Stepped</Button>
+                                    <Button onClick={()=>{updateEdgeType('smoothstep')}}>Smooth Stepped</Button>
+                                </HStack>
                                 <FormHelperText>See: <Link href="https://reactflow.dev/examples/edges/">https://reactflow.dev/examples/edges/</Link></FormHelperText>
                             </FormControl>
                             
                             <br/><Divider/><br/>
                             
-                            <FormControl id="connector-edit-form--style" as="fieldset">
-                                <FormLabel as="legend">Connector Style</FormLabel>
-                                <RadioGroup defaultValue="noanim-regular">
-                                    <HStack spacing="1vw">
-                                        <Radio value="noanim-regular">Regular, not animated.</Radio>
-                                        <Radio value="reuglar">Regular, animated.</Radio>
-                                    </HStack>
-                                </RadioGroup>
+                            <FormControl as="fieldset">
+                                <FormLabel as="legend">Animated</FormLabel>
+                                <HStack spacing="1vw">
+                                    <Button onClick={()=>{updateEdgeType('bezier',true)}}>Bezier</Button>
+                                    <Button onClick={()=>{updateEdgeType('straight',true)}}>Straight</Button>
+                                    <Button onClick={()=>{updateEdgeType('step',true)}}>Stepped</Button>
+                                    <Button onClick={()=>{updateEdgeType('smoothstep',true)}}>Smooth Stepped</Button>
+                                </HStack>
                                 <FormHelperText>See: <Link href="https://reactflow.dev/examples/edges/">https://reactflow.dev/examples/edges/</Link></FormHelperText>
                             </FormControl>
                             
@@ -227,35 +268,7 @@ const ReadingList = params => {
                             <ButtonGroup style={{paddingTop:'1vh'}} d="flex" justifyContent="flex-end">
                                 <Button
                                     onClick={() => {
-                                        try{
-                                            const edgeTypes = {
-                                                default: BezierEdge,
-                                                straight: StraightEdge,
-                                                step: StepEdge,
-                                                smoothstep: SmoothStepEdge
-                                            }
-                                            const connType = document.getElementById('connector-edit-form--type')
-                                            const connStyle = document.getElementById('connector-edit-form--style')
-
-                                            setConnectionLineComponent(edgeTypes[connType.value])
-                                            
-                                            toast({
-                                                title: "Success.",
-                                                description: "Edge type hase been set.",
-                                                status: "success",
-                                                duration: 2000,
-                                                isClosable: true,
-                                            })
-                                        }catch(e){
-                                            console.log(e)
-                                            toast({
-                                                title: "Error.",
-                                                description: `Edge type could not be set (see logs for details): ${e}`,
-                                                status: "error",
-                                                duration: 2000,
-                                                isClosable: true,
-                                            })
-                                        }
+                                        
                                     }}>
                                     Apply
                                 </Button>
@@ -272,7 +285,8 @@ const ReadingList = params => {
                             nodeTypes={{
                                 editable: EditableNode,
                             }}
-                            connectionLineComponent={connectionLineComponent}>
+                            connectionLineComponent={connectionLineComponent}
+                            onConnect={onConnect}>
                             <Background
                                 gap={25}
                                 size={1}/>
