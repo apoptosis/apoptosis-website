@@ -79,10 +79,10 @@ const ReadingList = params => {
                 ),
                 onChange: () => {}
             },
-            position: project({
+            position: {
                 x: e.clientX,
                 y: e.clientY,
-            }),
+            },
         };
         setElements((els) => els.concat(newNode));
     }, [setElements])
@@ -121,10 +121,10 @@ const ReadingList = params => {
                     </>
                 )
             },
-            position: project({
+            position: {
                 x: e.clientX,
                 y: e.clientY,
-            }),
+            },
         }
         setElements((els) => els.concat(newNode));
     }, [setElements]);
@@ -269,7 +269,7 @@ const ReadingList = params => {
                             elements={elements}
                             onLoad={setRfInstance}
                             snapToGrid={true}
-                            snapGrid={[25, 25]}
+                            snapGrid={[1, 1]}
                             onConnect={onConnect}
                             nodeTypes={{
                                 editable: EditableNode,
@@ -311,7 +311,7 @@ const ReadingList = params => {
                     elements={elements}
                     onLoad={onLoad}
                     snapToGrid={true}
-                    snapGrid={[25, 25]}>
+                    snapGrid={[1, 1]}>
                     <Background
                         gap={25}
                         size={1}/>
