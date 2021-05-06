@@ -133,9 +133,11 @@ const ReadingList = params => {
     const onSave = useCallback(() => {
         if (rfInstance) {
             const flow = rfInstance.toObject();
+            const json =JSON.stringify(flow) 
             
             let hiddenElement = document.createElement('a')
-            hiddenElement.href = 'data:application/json,' + encodeURI(JSON.stringify(flow.elements))
+            //hiddenElement.href = 'data:application/json,' + encodeURI(JSON.stringify(flow.elements))
+            hiddenElement.href = 'data:application/octet-stream;base64,' + btoa(JSON.stringify(flow.elements))
             hiddenElement.target = '_blank'
             hiddenElement.download = 'rfInstance.json'
             hiddenElement.click()
@@ -148,11 +150,12 @@ const ReadingList = params => {
 
             let input = document.createElement('input');
             input.type = 'file';
+            console.log('hello world')
 
             input.onchange = e => { 
 
                 // getting a hold of the file reference
-                var file = e.target.files[0]; 
+                var file = e.target.files[0];
 
                 // setting up the reader
                 var reader = new FileReader();
@@ -160,8 +163,9 @@ const ReadingList = params => {
 
                 // here we tell the reader what to do when it's done reading...
                 reader.onload = readerEvent => {
-                    var content = readerEvent.target.result; // this is the content!
-                    setElements( JSON.parse(content) );
+                    var content = JSON.parse(readerEvent.target.result); // this is the content!
+                    console.log(content)
+                    setElements( content.elements || [] );
                 }
 
             }
