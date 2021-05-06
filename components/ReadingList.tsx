@@ -150,7 +150,6 @@ const ReadingList = params => {
 
             let input = document.createElement('input');
             input.type = 'file';
-            console.log('hello world')
 
             input.onchange = e => { 
 
@@ -164,12 +163,10 @@ const ReadingList = params => {
                 // here we tell the reader what to do when it's done reading...
                 reader.onload = readerEvent => {
                     var content = JSON.parse(readerEvent.target.result); // this is the content!
-                    console.log(content)
-                    setElements( content.elements || [] );
+                    console.log('content is', content)
+                    setElements( content || [] );
                 }
-
             }
-
             input.click();
         }
         restoreFlow();
@@ -187,7 +184,6 @@ const ReadingList = params => {
                         data: newNodeData
                     };
                 }
-                
                 return el;
             })
         );
@@ -235,8 +231,6 @@ const ReadingList = params => {
             })
         }
     }, [setConnectionType, setAnimateEdges])
-    
-    //const onConnect = (params) => setElements((els) => addEdge(params, els))
 
     const onConnect = useCallback( params => {
         setElements(els => {
