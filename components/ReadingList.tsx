@@ -105,22 +105,6 @@ const ReadingList = params => {
                 onChange: () => {},
                 color: '#fff',
                 customConnectors: false,
-
-                // leaving here for example, tag: DOCUMENT
-                connectors: (
-                    <>
-                        <Handle
-                            type="target"
-                            position="top"
-                            id="a"
-                            style={{ top: 10, background: '#555' }}/>
-                        <Handle
-                            type="source"
-                            position="bottom"
-                            id="b"
-                            style={{ bottom: 10, top: 'auto', background: '#555' }}/>
-                    </>
-                )
             },
             position: {
                 x: e.clientX,
@@ -163,6 +147,58 @@ const ReadingList = params => {
                 reader.onload = readerEvent => {
                     var content = JSON.parse(readerEvent.target.result); // this is the content!
                     console.log('content is', content)
+                    let loadElements = []
+                    for(let el of content){
+                        if(!!el.data){
+                            const elChildren = el.data.label.props.children
+                            switch(typeof elChildren){
+                                case typeof '':{
+                                    {
+                                        loadElements.push(
+                                            {
+                                                ...el,
+                                                data: {
+                                                    ...el.data,
+                                                    label: elChildren
+                                                }
+                                            }
+                                        )
+                                    }
+                                    break;
+                                }
+
+                                case typeof {}:{
+                                    {
+                                        switch(elChildren.type){
+                                            case 'img':{
+                                                {
+                                                    loadElements.push(
+                                                        {
+                                                            ...el,
+                                                            data: {
+                                                                ...el.data,
+                                                                label:(
+                                                                    <>
+                                                                        <img style={{ width:100, height:150, zIndex:-1 }} src={elChildren.src} alt={elChildren.alt}/>
+                                                                    </>
+                                                                )
+                                                            }
+                                                        }
+                                                    )            
+                                                }
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    break;
+                                }
+                            }
+                        }
+                        else{
+                            loadElements.push(el)
+                        }
+                    }
+                    console.log(loadElements)
                     setElements( content || [] );
                 }
             }
