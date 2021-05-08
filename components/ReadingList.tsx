@@ -136,7 +136,6 @@ const ReadingList = params => {
             const json =JSON.stringify(flow) 
             
             let hiddenElement = document.createElement('a')
-            //hiddenElement.href = 'data:application/json,' + encodeURI(JSON.stringify(flow.elements))
             hiddenElement.href = 'data:application/octet-stream;base64,' + btoa(JSON.stringify(flow.elements))
             hiddenElement.target = '_blank'
             hiddenElement.download = 'rfInstance.json'
