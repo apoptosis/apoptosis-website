@@ -179,7 +179,7 @@ const ReadingList = params => {
                                                                 ...el.data,
                                                                 label:(
                                                                     <>
-                                                                        <img style={{ width:100, height:150, zIndex:-1 }} src={elChildren.src} alt={elChildren.alt}/>
+                                                                        <img style={{ width:100, height:150, zIndex:-1 }} src={elChildren.props.src} alt={elChildren.props.alt}/>
                                                                     </>
                                                                 )
                                                             }
@@ -199,7 +199,7 @@ const ReadingList = params => {
                         }
                     }
                     console.log(loadElements)
-                    setElements( content || [] );
+                    setElements( loadElements || [] );
                 }
             }
             input.click();
