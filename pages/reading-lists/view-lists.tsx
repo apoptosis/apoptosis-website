@@ -4,19 +4,19 @@ import PageHeaderBar from '../../components/PageHeaderBar'
 import PageFooter from '../../components/PageFooter'
 import { ChakraProvider, ColorModeScript } from '@chakra-ui/react'
 
-import theme from '../../data/theme'
-import conf from '../../data/config'
+import theme from '../../olddata/theme'
+import conf from '../../olddata/config'
 import Particles from 'react-tsparticles'
-import { particlesJS_config } from '../../data/PJS'
+import { particlesJS_config } from '../../olddata/PJS'
 import { Box, useColorModeValue, Container, UnorderedList, ListItem, Link } from '@chakra-ui/react'
 
 const view_lists = () => {
     return (
         <ChakraProvider>
             <ColorModeScript initialColorMode={theme.config.initialColorMode} />
-            <PageHead/>
-            <PageHeaderBar/>
-            <div style={{ position: 'absolute', zIndex: -1, top: "35vh"}}>
+            <PageHead />
+            <PageHeaderBar />
+            <div style={{ position: 'absolute', zIndex: -1, top: "35vh" }}>
                 <Particles height="70vh" width="100vw" params={particlesJS_config} />
             </div>
             <Box w="100%" p={4}>
@@ -27,10 +27,10 @@ const view_lists = () => {
                         <ListItem>Consectetur adipiscing elit</ListItem>
                         <ListItem>Integer molestie lorem at massa</ListItem>
                         <ListItem>Facilisis in pretium nisl aliquet</ListItem>
-                </UnorderedList>
+                    </UnorderedList>
                 </Container>
             </Box>
-            <PageFooter top="80vh"/>
+            <PageFooter top="80vh" />
         </ChakraProvider>
     )
 }
