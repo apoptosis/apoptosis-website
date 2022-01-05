@@ -7,19 +7,19 @@ const nextjs = {
     },
     trailingSlash: true,
     poweredByHeader: false,
-    basePath: "/apoptosis",
-    assetPrefix: "/apoptosis/"
+    // basePath: "/apoptosis",
+    // assetPrefix: "/apoptosis/"
 }
 
 module.exports = withPlugins(
     [
-      [
-        optimizedImages,
-        {
-          // optimisation disabled by default, to enable check https://github.com/cyrilwanner/next-optimized-images
-          optimizeImages: false,
-        },
-      ],
+        [
+            optimizedImages,
+            {
+                // optimisation disabled by default, to enable check https://github.com/cyrilwanner/next-optimized-images
+                optimizeImages: false,
+            },
+        ],
     ],
     nextjs
-  );
+);
