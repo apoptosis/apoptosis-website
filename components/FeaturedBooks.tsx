@@ -1,10 +1,7 @@
-import { BOOKS } from '../data/reading-lists/books'
 import { AUTHORS } from '../data/reading-lists/authors'
 import { auth } from '../utils/auth'
-import { Box, Image, VStack, HStack, Center, Heading, Container } from '@chakra-ui/react'
-import { FC, useEffect, useState } from 'react'
-
-
+import { Box, VStack, HStack, Center, Heading } from '@chakra-ui/react'
+import { FC } from 'react'
 
 type BookProps = {
     id: string;
@@ -12,14 +9,14 @@ type BookProps = {
 }
 
 const Book: FC<BookProps> = ({ id, book }) => {
-    const imgsrc = '/img/list-content/' + id + '.jpg'
+    const imgsrc = '/apoptosis/img/list-content/' + id + '.jpg'
     const booktitle = book.title
     const bookauthor = auth(AUTHORS[book.author[0]])
     try{
         return (
             <Box w="20vw">
                 <VStack>
-                    <img style={{height: 300, width: 200}} src={imgsrc}/>
+                    <img height="20vh" src={imgsrc}/>
                     <Center align="center"><Heading size="md">{booktitle}</Heading></Center>
                     <Center align="center"><Heading size="xs">{bookauthor}</Heading></Center>
                 </VStack>
@@ -27,27 +24,11 @@ const Book: FC<BookProps> = ({ id, book }) => {
         )
     }
     catch(TypeError){
-        return <p>{{ id, book}}</p>
+        return <p>Error in {id} : {book}</p>
     }
 }
 
-const FeaturedBooks = () => {
-    const book_ids = Object.keys(BOOKS)
-    book_ids.sort()
-
-    const pick = (idx?) => {
-        const index = idx || Math.floor(Math.random()*book_ids.length)
-        const id = book_ids.splice(index, 1)[0];
-        return {
-            id, book: BOOKS[id]
-        }
-    }
-
-    const [featured, setFeatured] = useState([]);
-    useEffect(() => {
-        setFeatured([pick(), pick(), pick()])
-    }, []) // randomize first time component is mounted
-
+const FeaturedBooks = ({ featured }) => {
     return (
         <div style={{ paddingTop: "2vh", }}>
             <VStack spacing={5}>

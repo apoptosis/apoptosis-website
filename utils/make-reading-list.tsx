@@ -1,5 +1,13 @@
 import ReactFlow from 'react-flow-renderer'
-import fac from './factorial'
+// import fac from './factorial'
+
+// typescript factorial function
+function fac(n:number): number {
+    if (n === 0) {
+        return 1
+    }
+    return n * fac(n - 1)
+}
 
 function nCk(n:number,k:number): number{
     if(0<=k && k<n){
@@ -35,7 +43,7 @@ export default function make_rl(rl:any[], farr:number[], cats:string[], vis:{}):
         })();
         i++){
         switch(i){
-                
+
         }
     }
     return rl_elements

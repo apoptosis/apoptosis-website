@@ -4,28 +4,42 @@ import PageHeaderBar from '../../components/PageHeaderBar'
 import PageFooter from '../../components/PageFooter'
 import Hero from '../../components/Hero'
 import FeaturedBooks from '../../components/FeaturedBooks'
-import Image from 'next/image'
-import { ChakraProvider, ColorModeScript } from "@chakra-ui/react"
+import { Box, ChakraProvider, ColorModeScript, Flex } from "@chakra-ui/react"
 import theme from '../../data/theme'
-import conf from '../../data/config'
-import Particles from 'react-particles-js'
+import Particles from 'react-tsparticles'
 import { particlesJS_config } from '../../data/PJS'
-import sytles from '../../styles/globals.css'
+import { BOOKS } from '../../data/reading-lists/books'
 
-const ReadingLists = () => {
-    
+export function getStaticProps() {
+    //
+    const book_ids = Object.keys(BOOKS)
+    book_ids.sort()
+
+    const pick = (idx?) => {
+        const index = idx || Math.floor(Math.random() * book_ids.length)
+        const id = book_ids.splice(index, 1)[0];
+        return {
+            id, book: BOOKS[id]
+        }
+    }
+
+    const featured = [pick(), pick(), pick()]
+    return {
+        props: {
+            featured
+        }
+    }
+}
+
+const ReadingLists = ({ featured }) => {
+
     return (
-        <ChakraProvider>
-            <ColorModeScript initialColorMode={theme.config.initialColorMode} />
-            <PageHead/>
-            <PageHeaderBar/>
-            <div style={{ position: 'absolute', zIndex: -1, top: "35vh"}}>
-                <Particles height="70vh" width="100vw" params={particlesJS_config} />
-            </div>
-            <Hero title="Reading Lists" subtitle="Community curated topical reading cirriculums"/>
-            <FeaturedBooks/>
-            <PageFooter top="90vh"/>
-        </ChakraProvider>
+        <Flex flexDir="column" alignItems="center">
+            <Hero title="Reading Lists" subtitle="Community curated topical reading cirriculums" />
+            <Box pb="3em">
+                <FeaturedBooks featured={featured} />
+            </Box>
+        </Flex>
     )
 }
 export default ReadingLists

@@ -1,41 +1,56 @@
 import React from 'react';
-import { Box, Flex, Spacer, Image, Heading, Link, Button, useColorMode } from "@chakra-ui/react"
+import { Box, Flex, Spacer, Heading, Button, useColorMode } from "@chakra-ui/react"
 import conf from '../data/config'
-import { MoonIcon, SunIcon  } from '@chakra-ui/icons'
+import { MoonIcon, SunIcon } from '@chakra-ui/icons'
 import { AiFillGithub } from 'react-icons/ai'
+import { Link } from "./Link"
+
+import { useColor } from './colors';
+
+const logo = require('../public/img/logo.png');
+
+const MenuButton = ({ link, label }) => {
+    const fg = useColor('foreground')
+
+    return <Link href={link}>
+        <Button pt="3px" color={fg} colorScheme="whiteAlpha" variant="ghost" size="lg" mr="2">{label}</Button>
+    </Link>
+}
 
 const PageHeaderBar = () => {
     const { colorMode, toggleColorMode } = useColorMode()
+    const background = useColor('background')
+    const foreground = useColor('foreground')
+    console.log(`header backgorund: ${background}`)
+    console.log(`header foreground: ${foreground}`)
     return (
-        <Box bg="#111111" w="100%" p={4} color="white" boxShadow="dark-lg">
-            <Flex>
-                <Box p="0" w="12" mr="2">
-                    <Link href="/" isExternal>
-                        <Image src="/img/logo.png" alt="Apoptosis Logo"/>
-                    </Link>
-                </Box>
-                <Box p="1" mr="4">
-                    <Link href="/" isExternal>
-                        <Heading size="lg">{conf.title}</Heading>
-                    </Link>
-                </Box>
-                <Link href="/reading-lists">
-                    <Button color="white" colorScheme="whiteAlpha" variant="ghost" size="lg" mr="2">Reading Lists</Button>
-                </Link>
-                <Link href="/blog">
-                    <Button color="white" colorScheme="whiteAlpha" variant="ghost" size="lg" mr="2">Articles</Button>
-                </Link>
-                <Spacer />
-                <Button size="lg" color="white" colorScheme="whiteAlpha" variant="ghost" onClick={toggleColorMode} mr="2">
-                    {colorMode === "light" ? <MoonIcon/> : <SunIcon/>}
-                </Button> 
-                <Link href={`${conf.repo_host}${conf.repo}`} isExternal>
-                    <Button size="lg" color="white" colorScheme="whiteAlpha" variant="ghost">
-                        <AiFillGithub />
+        <Flex flexDir="row" alignItems="center" bg={background} p={4} color={foreground} boxShadow="dark-lg">
+            <Box>
+                <Link href="/" isExternal>
+                    <Button color={foreground} colorScheme="whiteAlpha" variant="ghost" size="lg" mr="2" fontSize="2em">
+                        <Flex>
+                            <Box w="12" mr="5">
+                                <Link href="/" isExternal>
+                                    <img src={logo} alt="Apoptosis Logo" />
+                                </Link>
+                            </Box>
+                        </Flex>
+                        {conf.title}
                     </Button>
+                    {/* <Heading size="lg">{conf.title}</Heading> */}
                 </Link>
-            </Flex>
-        </Box>
+            </Box>
+            <MenuButton link="/reading-lists" label="Reading Lists" />
+            <Spacer />
+            <Button color={foreground} size="lg" colorScheme="whiteAlpha" variant="ghost" onClick={toggleColorMode} mr="2">
+                {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
+            </Button>
+            <Link href={`${conf.repo_host}${conf.repo}`} isExternal>
+                <Button color={foreground} size="lg" colorScheme="whiteAlpha" variant="ghost">
+                    <AiFillGithub />
+                </Button>
+            </Link>
+        </Flex>
     )
 }
 export default PageHeaderBar
