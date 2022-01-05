@@ -13,7 +13,7 @@ const Layout = ({ children }) => {
     console.log(`Background: ${background}`)
     console.log(`Foreground: ${foreground}`)
     console.log(`Mode: ${JSON.stringify(mode)}`)
-    return <Flex height="100vh" flexDir="column" position="relative" bg={background} color={foreground}>
+    return <Flex minHeight="100vh" flexDir="column" position="relative" bg={background} color={foreground}>
         <ColorModeScript initialColorMode={theme.config.initialColorMode} />
         <PageHead />
         <PageHeaderBar />

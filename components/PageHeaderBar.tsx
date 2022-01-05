@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Flex, Spacer, Heading, Button, useColorMode } from "@chakra-ui/react"
-import conf from '../data/config'
+import conf from '../olddata/config'
 import { MoonIcon, SunIcon } from '@chakra-ui/icons'
 import { AiFillGithub } from 'react-icons/ai'
 import { Link } from "./Link"

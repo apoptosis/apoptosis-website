@@ -1,4 +1,4 @@
-import { AUTHORS } from '../data/reading-lists/authors'
+import { AUTHORS } from '../olddata/reading-lists/authors'
 import { auth } from '../utils/auth'
 import { Box, VStack, HStack, Center, Heading } from '@chakra-ui/react'
 import { FC } from 'react'
@@ -12,18 +12,18 @@ const Book: FC<BookProps> = ({ id, book }) => {
     const imgsrc = '/apoptosis/img/list-content/' + id + '.jpg'
     const booktitle = book.title
     const bookauthor = auth(AUTHORS[book.author[0]])
-    try{
+    try {
         return (
             <Box w="20vw">
                 <VStack>
-                    <img height="20vh" src={imgsrc}/>
+                    <img height="20vh" src={imgsrc} />
                     <Center align="center"><Heading size="md">{booktitle}</Heading></Center>
                     <Center align="center"><Heading size="xs">{bookauthor}</Heading></Center>
                 </VStack>
             </Box>
         )
     }
-    catch(TypeError){
+    catch (TypeError) {
         return <p>Error in {id} : {book}</p>
     }
 }

@@ -1,14 +1,8 @@
 import React from 'react'
-import PageHead from '../../components/PageHead'
-import PageHeaderBar from '../../components/PageHeaderBar'
-import PageFooter from '../../components/PageFooter'
 import Hero from '../../components/Hero'
 import FeaturedBooks from '../../components/FeaturedBooks'
-import { Box, ChakraProvider, ColorModeScript, Flex } from "@chakra-ui/react"
-import theme from '../../data/theme'
-import Particles from 'react-tsparticles'
-import { particlesJS_config } from '../../data/PJS'
-import { BOOKS } from '../../data/reading-lists/books'
+import { Box, Flex } from "@chakra-ui/react"
+import { BOOKS } from '../../olddata/reading-lists/books'
 
 export function getStaticProps() {
     //

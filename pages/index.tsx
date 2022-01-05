@@ -4,10 +4,10 @@ import PageHeaderBar from '../components/PageHeaderBar'
 import PageFooter from '../components/PageFooter'
 import Image from 'next/image'
 import { ChakraProvider, ColorModeScript, Container, Center, Heading, Box } from "@chakra-ui/react"
-import theme from '../data/theme'
-import conf from '../data/config'
+import theme from '../olddata/theme'
+import conf from '../olddata/config'
 import Particles from 'react-tsparticles'
-import { particlesJS_config } from '../data/PJS'
+import { particlesJS_config } from '../olddata/PJS'
 
 const Index = () => {
     return (
