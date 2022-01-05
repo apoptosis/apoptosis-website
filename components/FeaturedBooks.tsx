@@ -9,7 +9,7 @@ type BookProps = {
 }
 
 const Book: FC<BookProps> = ({ id, book }) => {
-    const imgsrc = '/apoptosis/img/list-content/' + id + '.jpg'
+    const imgsrc = '/img/list-content/' + id + '.jpg'
     const booktitle = book.title
     const bookauthor = auth(AUTHORS[book.author[0]])
     try {
