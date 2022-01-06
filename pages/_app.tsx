@@ -10,16 +10,13 @@ const Layout = ({ children }) => {
     const mode = useColorMode()
     const background = useColor('background')
     const foreground = useColor('foreground')
-    console.log(`Background: ${background}`)
-    console.log(`Foreground: ${foreground}`)
-    console.log(`Mode: ${JSON.stringify(mode)}`)
     return <Flex minHeight="100vh" flexDir="column" position="relative" bg={background} color={foreground}>
         <ColorModeScript initialColorMode={theme.config.initialColorMode} />
         <PageHead />
         <PageHeaderBar />
-        <Box flexGrow="1">
+        <Flex flexDir="column" flexGrow="1">
             {children}
-        </Box>
+        </Flex>
         <PageFooter />
     </Flex>
 }

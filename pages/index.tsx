@@ -1,4 +1,4 @@
-import { Center, Heading, Box } from "@chakra-ui/react"
+import { Center, Heading, Box, Flex } from "@chakra-ui/react"
 import conf from '../olddata/config'
 
 import React, { useState, useEffect, useRef } from 'react'
@@ -28,16 +28,16 @@ const Cells = (props) => {
             if (vantaEffect) (vantaEffect as any).destroy()
         }
     }, [vantaEffect])
-    return <div ref={vantaRef}>
+    return <Flex flexGrow="1" ref={vantaRef} justifyContent="center" alignItems="center">
         {props.children}
-    </div>
+    </Flex>
 }
 
 const Index = () => {
     return (
         <Cells>
             <Box pt="20vh" pb="20vh" pl="30vw" pr="30vw">
-                <Box p="12" boxShadow="dark-lg">
+                <Box p="12" boxShadow="dark-lg" bg="#212c20" maxWidth={485}>
                     <Center>
                         <Heading size="xl">{conf.tagline}</Heading>
                     </Center>
