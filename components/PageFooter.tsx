@@ -9,7 +9,8 @@ import { useColor } from './colors';
 const Toe = ({ url, children }) => {
     const fg = useColor('primaryLight')
     return <Link href={url}>
-        <Button color={fg} colorScheme="whiteAlpha" variant="solid" size="xs">{children}</Button>
+        {children}
+        {/* <Button color={fg} colorScheme="whiteAlpha" variant="solid" size="xs">{children}</Button> */}
     </Link>
 }
 
